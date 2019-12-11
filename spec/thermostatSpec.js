@@ -72,4 +72,25 @@ describe('Thermostat', function(){
     expect(thermostat.getCurrentTemperature()).toEqual(20);
   });
 
+  describe('displaying usage levels', function() {
+    describe('when the temperature is below 18', function(){
+      it('it is considered low-usage', function() {
+        for (var i = 0; i < 3; i++) {
+          thermostat.down();
+        }
+   
+      expect(thermostat.energyUsage()).toEqual('low-usage');
+    });
+  });
+  describe('when the temperature is between 18 to 25', function() {
+    it('it is high', function() {
+      thermostat.powerSavingMode = false;
+      for (var i = 0; i < 6; i++) {
+        thermostat.up();
+      } 
+expect(thermostat.energyUsage()).toEqual('high-usage');
+    });
+  });
+});
+
 });

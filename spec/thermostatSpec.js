@@ -28,7 +28,7 @@ describe('Thermostat', function(){
         thermostat.down();
       }
       expect(thermostat.getCurrentTemperature()).toEqual(10);
-    })
+    });
   
     it('knows when PSM is on', function(){
       expect(thermostat.isPowerSavingModeOn()).toBe(true);
@@ -69,16 +69,30 @@ describe('Thermostat', function(){
       thermostat.switchPowerSavingModeOff();
       for (var i = 0; i < 13; i++) {
         thermostat.up();
-      }
+      };
+    });
+
+    describe('switching power saving mode back on', function() {
+      describe('if temperature is above 25 degrees', function() {
+        it('lower the temperature to 25 degrees', function() {
+          thermostat.switchPowerSavingModeOn();
+          expect(thermostat.getCurrentTemperature()).toEqual(25);
+        });
+      });
+
+      describe('if temperature is below 25 degrees', function() {
+        it('temperature is unnafected', function() {
+          for (var i = 0; i < 12; i++) {
+            thermostat.down();
+          }
+          thermostat.switchPowerSavingModeOn();
+          expect(thermostat.getCurrentTemperature()).toEqual(20);
+        });
+      });
     });
 
     it('maximum temperature is 32 degrees', function() {
       expect(thermostat.getCurrentTemperature()).toEqual(32);
-    });
-
-    it('turning PSM on lowers the temperature to 25 degrees', function() {
-      thermostat.switchPowerSavingModeOn();
-      expect(thermostat.getCurrentTemperature()).toEqual(25);
     });
   });
 
@@ -87,9 +101,9 @@ describe('Thermostat', function(){
       it('it is considered low-usage', function() {
         for (var i = 0; i < 3; i++) {
           thermostat.down();
-        }
-   
-      expect(thermostat.energyUsage()).toEqual('low-usage');
+        };
+        expect(thermostat.energyUsage()).toEqual('low-usage');
+      });
     });
   });
 
@@ -98,10 +112,9 @@ describe('Thermostat', function(){
       thermostat.powerSavingMode = false;
       for (var i = 0; i < 6; i++) {
         thermostat.up();
-      } 
-    expect(thermostat.energyUsage()).toEqual('high-usage');
+      }; 
+      expect(thermostat.energyUsage()).toEqual('high-usage');
     });
   });
 });
 
-});
